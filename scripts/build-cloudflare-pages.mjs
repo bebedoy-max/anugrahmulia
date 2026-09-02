@@ -10,6 +10,7 @@
  * Jalankan lewat: npm run build:pages
  */
 import { cp, mkdir, readdir, rm, rename, writeFile, access } from "node:fs/promises";
+import { spawnSync } from "node:child_process";
 import path from "node:path";
 
 const root = process.cwd();
@@ -27,12 +28,31 @@ async function exists(p) {
   }
 }
 
-for (const dir of [clientDir, serverDir]) {
-  if (!(await exists(dir))) {
-    console.error(`[pages] Tidak menemukan ${path.relative(root, dir)}. Jalankan "npm run build" lebih dulu.`);
-    process.exit(1);
+async function ensureViteBuild() {
+  const missing = [];
+  for (const dir of [clientDir, serverDir]) {
+    if (!(await exists(dir))) missing.push(path.relative(root, dir));
+  }
+  if (missing.length === 0) return;
+
+  console.log(`[pages] ${missing.join(" & ")} belum ada. Menjalankan "vite build" otomatis...`);
+  const res = spawnSync(process.execPath, [path.join(root, "node_modules/vite/bin/vite.js"), "build"], {
+    stdio: "inherit",
+    cwd: root,
+  });
+  if (res.status !== 0) {
+    console.error("[pages] vite build gagal.");
+    process.exit(res.status ?? 1);
+  }
+  for (const dir of [clientDir, serverDir]) {
+    if (!(await exists(dir))) {
+      console.error(`[pages] Masih tidak menemukan ${path.relative(root, dir)} setelah build.`);
+      process.exit(1);
+    }
   }
 }
+
+await ensureViteBuild();
 
 // Nitro menulis pengalihan konfigurasi Wrangler untuk mode Workers; pada Pages
 // berkas ini bikin Wrangler memakai konfigurasi worker (binding ASSETS) dan gagal.
