@@ -18,6 +18,21 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // @lovable.dev/vite-tanstack-config only points Nitro's output at dist/client +
+  // dist/server when the build runs inside Lovable's own sandbox. Outside of it
+  // (e.g. Cloudflare Pages CI, or `vite build` run locally) Nitro falls back to its
+  // own default output (.output/public + .output/server), which is NOT where
+  // scripts/build-cloudflare-pages.mjs looks — causing "Masih tidak menemukan
+  // dist/client setelah build". Pin the output dirs explicitly so both
+  // environments agree.
+  nitro: {
+    preset: "cloudflare-module",
+    output: {
+      dir: "dist",
+      serverDir: "dist/server",
+      publicDir: "dist/client",
+    },
+  },
   vite: {
     define: {
       "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(supabaseUrl),
