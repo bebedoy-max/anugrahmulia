@@ -1,0 +1,7 @@
+# Konfigurasi Cloudflare Pages (dibaca otomatis oleh Pages & Wrangler)
+# Deploy manual:  npm run deploy:pages
+# Deploy via Git: Cloudflare Pages membaca berkas ini dari root repository.
+name = "anugerah-mulia"
+compatibility_date = "2026-09-02"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist/pages"

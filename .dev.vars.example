@@ -1,0 +1,13 @@
+# Contoh variabel untuk uji lokal Cloudflare (wrangler pages dev).
+# Salin menjadi `.dev.vars` lalu isi nilainya. Berkas .dev.vars di-gitignore.
+# Di Cloudflare Pages, nilai-nilai ini diisi di Settings > Environment variables.
+
+APP_SUPABASE_URL="https://xxxxxxxxxxxx.supabase.co"
+APP_SUPABASE_PUBLISHABLE_KEY="sb_publishable_atau_anon_key"
+APP_SUPABASE_SERVICE_ROLE_KEY="sb_secret_atau_service_role_key"
+
+# Rahasia tanda tangan cookie sesi: openssl rand -hex 32
+AUTH_SECRET="ganti-dengan-nilai-acak-64-karakter"
+
+# URL publik situs (dibaca saat build)
+VITE_SITE_URL="https://domain-anda.com"
