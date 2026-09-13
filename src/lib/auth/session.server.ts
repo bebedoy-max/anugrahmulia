@@ -71,18 +71,25 @@ function isHttpsRequest(): boolean {
   }
 }
 
-export function setSessionCookie(token: string) {
-  setCookie(SESSION_COOKIE, token, {
+// Di pratinjau Lovable aplikasi dijalankan di dalam iframe lintas situs, jadi
+// cookie SameSite=Lax tidak pernah dikirim kembali dan sesi seolah hilang.
+// Saat koneksi HTTPS, pakai SameSite=None + Secure supaya sesi tetap terbaca.
+function cookieOptions() {
+  const https = isHttpsRequest();
+  return {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: (https ? "none" : "lax") as "none" | "lax",
     path: "/",
-    secure: isHttpsRequest(),
-    maxAge: MAX_AGE_SECONDS,
-  });
+    secure: https,
+  };
+}
+
+export function setSessionCookie(token: string) {
+  setCookie(SESSION_COOKIE, token, { ...cookieOptions(), maxAge: MAX_AGE_SECONDS });
 }
 
 export function clearSessionCookie() {
-  deleteCookie(SESSION_COOKIE, { path: "/" });
+  deleteCookie(SESSION_COOKIE, cookieOptions());
 }
 
 export function readSession(): SessionPayload | null {

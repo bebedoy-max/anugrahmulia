@@ -1,4 +1,6 @@
 import { Link } from "@tanstack/react-router";
+import { MessageCircle } from "lucide-react";
+import { openWhatsappChat } from "@/components/WhatsappFloat";
 
 export function SiteFooter() {
   return (
@@ -31,6 +33,13 @@ export function SiteFooter() {
           <p className="text-primary-foreground/70">halo@anugerahmulia.id</p>
           <p className="text-primary-foreground/70">+6281312778888</p>
           <p className="text-primary-foreground/70">Senin–Sabtu, 08.00–18.00 WIB</p>
+          <button
+            type="button"
+            onClick={openWhatsappChat}
+            className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90"
+          >
+            <MessageCircle className="h-4 w-4" /> Chat WhatsApp
+          </button>
         </div>
       </div>
       <div className="border-t border-primary-foreground/15 py-5 text-center text-xs text-primary-foreground/60">

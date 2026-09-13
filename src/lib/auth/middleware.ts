@@ -11,10 +11,11 @@ export const requireAuth = createMiddleware({ type: "function" }).server(async (
     throw new Response("Unauthorized", { status: 401 });
   }
 
-  const { data: isAdmin } = await db.rpc("has_role", {
-    _user_id: session.sub,
-    _role: "admin",
-  });
+  const { data: roleRows } = await db
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", session.sub);
+  const isAdmin = (roleRows ?? []).some((r: { role: string }) => r.role === "admin");
 
   return next({
     context: {

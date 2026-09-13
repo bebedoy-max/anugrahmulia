@@ -15,11 +15,8 @@ export type CompanyVideo = {
   deleted_at: string | null;
 };
 
-async function assertAdmin(context: { db: any; userId: string }) {
-  const { data: isAdmin } = await context.db.rpc("has_role", {
-    _user_id: context.userId,
-    _role: "admin",
-  });
+async function assertAdmin(context: { db: any; userId: string; isAdmin?: boolean }) {
+  const isAdmin = context.isAdmin;
   if (!isAdmin) throw new Error("Forbidden");
   const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
   return dbAdmin;

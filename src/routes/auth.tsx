@@ -53,12 +53,16 @@ function AuthPage() {
     const form = new FormData(event.currentTarget);
     setBusy(true);
     try {
-      await doSignIn({
+      const result = await doSignIn({
         data: {
           email: String(form.get("email") ?? "").trim(),
           password: String(form.get("password") ?? ""),
         },
       });
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
+      }
       await refresh();
       navigate({ to: target });
     } catch (error) {

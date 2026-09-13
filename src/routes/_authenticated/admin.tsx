@@ -26,6 +26,7 @@ import { ImageUploader } from "@/components/upload/ImageUploader";
 import { PillarManager } from "@/components/admin/PillarManager";
 import { CompanyVideoManager } from "@/components/admin/CompanyVideoManager";
 import { BannerManager } from "@/components/admin/BannerManager";
+import { WhatsappManager } from "@/components/admin/WhatsappManager";
 
 
 import { LocationPicker } from "@/components/map/LocationPicker";
@@ -250,6 +251,7 @@ function AdminPage() {
           <TabsTrigger value="reports">Laporan</TabsTrigger>
           <TabsTrigger value="banner">Banner Utama</TabsTrigger>
           <TabsTrigger value="video">Video Profil</TabsTrigger>
+          <TabsTrigger value="whatsapp">WhatsApp</TabsTrigger>
         </TabsList>
 
 
@@ -483,6 +485,10 @@ function AdminPage() {
 
         <TabsContent value="video">
           <CompanyVideoManager />
+        </TabsContent>
+
+        <TabsContent value="whatsapp">
+          <WhatsappManager />
         </TabsContent>
       </Tabs>
 
