@@ -9,7 +9,9 @@ export const Route = createFileRoute("/api/upload")({
         const session = readSession();
         if (!session) return new Response("Unauthorized", { status: 401 });
 
-        const { saveUpload, IMAGE_TYPES, VIDEO_TYPES } = await import("@/lib/storage.server");
+        const { saveRemoteUpload: saveUpload, IMAGE_TYPES, VIDEO_TYPES } = await import(
+          "@/lib/storage-remote.server"
+        );
         try {
           const form = await request.formData();
           const file = form.get("file");

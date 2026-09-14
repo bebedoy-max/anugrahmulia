@@ -213,13 +213,11 @@ function DetailPage() {
         <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
           <div className="space-y-8">
             <div>
-              <div className="overflow-hidden rounded-xl border bg-muted">
+              <div className="rounded-xl border bg-muted">
                 <img
                   src={gallery[active]?.url ?? gallery[0]!.url}
                   alt={`Foto ${property.title}`}
-                  width={1280}
-                  height={853}
-                  className="aspect-[3/2] w-full object-cover"
+                  className="block h-auto w-full rounded-xl"
                 />
               </div>
               {gallery.length > 1 ? (
@@ -232,7 +230,7 @@ function DetailPage() {
                       aria-label={`Lihat foto ${index + 1}`}
                       className={`overflow-hidden rounded-lg border-2 ${index === active ? "border-accent" : "border-transparent"}`}
                     >
-                      <img src={image.url} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                      <img src={image.url} alt="" loading="lazy" className="aspect-[4/3] w-full object-contain bg-muted" />
                     </button>
                   ))}
                 </div>

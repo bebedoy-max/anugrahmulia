@@ -16,6 +16,10 @@ const searchSchema = z.object({
 });
 
 export const Route = createFileRoute("/auth")({
+  // Form autentikasi bergantung pada server function dan status sesi browser.
+  // Merendernya hanya di browser mencegah hydration mismatch yang dapat membuat
+  // submit jatuh ke navigasi GET biasa sebelum handler React terpasang.
+  ssr: false,
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [

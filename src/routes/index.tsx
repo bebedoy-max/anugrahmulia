@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Building2, Home, Hotel, Plus, Scale } from "lucide-react";
+import { Building2, Home, Scale } from "lucide-react";
 import { PublicLayout } from "@/components/PublicLayout";
 import { PropertyCardItem } from "@/components/PropertyCard";
 import { Button } from "@/components/ui/button";
@@ -56,8 +56,7 @@ const CATEGORIES = [
   { slug: "tirtayasa-mulia", pillar: "properti", label: "Mulia Properti", icon: Home },
   { slug: "", pillar: "konstruksi", label: "Mulia Konstruksi", icon: Building2, to: "/konstruksi" as const },
   { slug: "", pillar: "pertanahan", label: "Mulia Pertanahan", icon: Scale, to: "/pertanahan" as const },
-  { slug: "", pillar: "penginapan", label: "Mulia Penginapan", icon: Hotel, disabled: true },
-  { slug: "", pillar: "lainnya", label: "Bisnis Lainnya", icon: Plus, disabled: true },
+  
 ];
 
 
@@ -107,21 +106,11 @@ function Index() {
 
       <section className="container-page py-14">
         <h2 className="font-display text-2xl md:text-3xl">Jelajahi berdasarkan kategori</h2>
-        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-5">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {CATEGORIES.map((cat) => {
             const cardClass =
               "flex flex-col items-center gap-3 rounded-xl border bg-card p-6 text-center shadow-soft transition-colors";
-            return cat.disabled ? (
-              <div
-                key={cat.label}
-                className={`${cardClass} cursor-not-allowed opacity-60`}
-                aria-label={`${cat.label} (segera hadir)`}
-                title="Segera hadir"
-              >
-                <cat.icon className="size-7 text-accent" aria-hidden />
-                <span className="text-sm font-medium">{cat.label}</span>
-              </div>
-            ) : "to" in cat && cat.to ? (
+            return "to" in cat && cat.to ? (
               <Link key={cat.label} to={cat.to} search={{ category: undefined }} className={`${cardClass} hover:border-accent`}>
                 <cat.icon className="size-7 text-accent" aria-hidden />
                 <span className="text-sm font-medium">{cat.label}</span>

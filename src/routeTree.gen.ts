@@ -26,6 +26,7 @@ import { Route as AuthenticatedFavoritRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as LayananSlugRouteImport } from './routes/layanan.$slug'
+import { Route as MediaSplatRouteImport } from './routes/media.$'
 import { Route as PropertiIndexRouteImport } from './routes/properti.index'
 import { Route as PropertiSlugRouteImport } from './routes/properti.$slug'
 import { Route as UploadsSplatRouteImport } from './routes/uploads.$'
@@ -115,6 +116,11 @@ const LayananSlugRoute = LayananSlugRouteImport.update({
   path: '/layanan/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MediaSplatRoute = MediaSplatRouteImport.update({
+  id: '/media/$',
+  path: '/media/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PropertiIndexRoute = PropertiIndexRouteImport.update({
   id: '/properti/',
   path: '/properti/',
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/profil': typeof AuthenticatedProfilRoute
   '/api/upload': typeof ApiUploadRoute
   '/layanan/$slug': typeof LayananSlugRoute
+  '/media/$': typeof MediaSplatRoute
   '/properti/$slug': typeof PropertiSlugRoute
   '/uploads/$': typeof UploadsSplatRoute
   '/properti/': typeof PropertiIndexRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByTo {
   '/profil': typeof AuthenticatedProfilRoute
   '/api/upload': typeof ApiUploadRoute
   '/layanan/$slug': typeof LayananSlugRoute
+  '/media/$': typeof MediaSplatRoute
   '/properti/$slug': typeof PropertiSlugRoute
   '/uploads/$': typeof UploadsSplatRoute
   '/properti': typeof PropertiIndexRoute
@@ -200,6 +208,7 @@ export interface FileRoutesById {
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/api/upload': typeof ApiUploadRoute
   '/layanan/$slug': typeof LayananSlugRoute
+  '/media/$': typeof MediaSplatRoute
   '/properti/$slug': typeof PropertiSlugRoute
   '/uploads/$': typeof UploadsSplatRoute
   '/properti/': typeof PropertiIndexRoute
@@ -224,6 +233,7 @@ export interface FileRouteTypes {
     | '/profil'
     | '/api/upload'
     | '/layanan/$slug'
+    | '/media/$'
     | '/properti/$slug'
     | '/uploads/$'
     | '/properti/'
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/profil'
     | '/api/upload'
     | '/layanan/$slug'
+    | '/media/$'
     | '/properti/$slug'
     | '/uploads/$'
     | '/properti'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profil'
     | '/api/upload'
     | '/layanan/$slug'
+    | '/media/$'
     | '/properti/$slug'
     | '/uploads/$'
     | '/properti/'
@@ -289,6 +301,7 @@ export interface RootRouteChildren {
   TentangRoute: typeof TentangRoute
   ApiUploadRoute: typeof ApiUploadRoute
   LayananSlugRoute: typeof LayananSlugRoute
+  MediaSplatRoute: typeof MediaSplatRoute
   PropertiSlugRoute: typeof PropertiSlugRoute
   UploadsSplatRoute: typeof UploadsSplatRoute
   PropertiIndexRoute: typeof PropertiIndexRoute
@@ -416,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayananSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/media/$': {
+      id: '/media/$'
+      path: '/media/$'
+      fullPath: '/media/$'
+      preLoaderRoute: typeof MediaSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/properti/': {
       id: '/properti/'
       path: '/properti'
@@ -478,6 +498,7 @@ const rootRouteChildren: RootRouteChildren = {
   TentangRoute: TentangRoute,
   ApiUploadRoute: ApiUploadRoute,
   LayananSlugRoute: LayananSlugRoute,
+  MediaSplatRoute: MediaSplatRoute,
   PropertiSlugRoute: PropertiSlugRoute,
   UploadsSplatRoute: UploadsSplatRoute,
   PropertiIndexRoute: PropertiIndexRoute,
