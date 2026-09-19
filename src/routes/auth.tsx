@@ -40,6 +40,8 @@ function AuthPage() {
   const navigate = useNavigate();
   const { user, loading, refresh } = useAuth();
   const [busy, setBusy] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   const doSignIn = useServerFn(signInFn);
   const doSignUp = useServerFn(signUpFn);
   const target = safePath(redirect);
@@ -127,7 +129,7 @@ function AuthPage() {
                 <Label htmlFor="login-password">Kata sandi</Label>
                 <Input id="login-password" name="password" type="password" required maxLength={72} />
               </div>
-              <Button type="submit" className="w-full" disabled={busy}>Masuk</Button>
+              <Button type="submit" className="w-full" disabled={busy || !ready}>Masuk</Button>
             </form>
           </TabsContent>
           <TabsContent value="daftar">
@@ -144,7 +146,7 @@ function AuthPage() {
                 <Label htmlFor="reg-password">Kata sandi</Label>
                 <Input id="reg-password" name="password" type="password" required minLength={8} maxLength={72} />
               </div>
-              <Button type="submit" className="w-full" disabled={busy}>Buat akun</Button>
+              <Button type="submit" className="w-full" disabled={busy || !ready}>Buat akun</Button>
             </form>
           </TabsContent>
         </Tabs>

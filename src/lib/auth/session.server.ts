@@ -71,18 +71,30 @@ function isHttpsRequest(): boolean {
   }
 }
 
+// Preview Lovable menampilkan aplikasi di dalam iframe lintas situs, sehingga
+// cookie SameSite=Lax akan dibuang browser dan login terlihat "gagal masuk".
+// Saat permintaan lewat HTTPS, pakai SameSite=None + Secure (+ Partitioned)
+// agar sesi tetap tersimpan di iframe; di HTTP lokal tetap Lax.
+function cookieOptions() {
+  const https = isHttpsRequest();
+  return {
+    httpOnly: true,
+    path: "/",
+    secure: https,
+    sameSite: https ? ("none" as const) : ("lax" as const),
+    ...(https ? { partitioned: true } : {}),
+  };
+}
+
 export function setSessionCookie(token: string) {
   setCookie(SESSION_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-    secure: isHttpsRequest(),
+    ...cookieOptions(),
     maxAge: MAX_AGE_SECONDS,
   });
 }
 
 export function clearSessionCookie() {
-  deleteCookie(SESSION_COOKIE, { path: "/" });
+  deleteCookie(SESSION_COOKIE, cookieOptions());
 }
 
 export function readSession(): SessionPayload | null {
