@@ -4,7 +4,10 @@ import { requireAuth } from "@/lib/auth/middleware";
 export const getAdminStats = createServerFn({ method: "GET" })
   .middleware([requireAuth])
   .handler(async ({ context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const [props, users, inquiries, schedules, reports] = await Promise.all([
@@ -33,7 +36,10 @@ export const adminListProperties = createServerFn({ method: "GET" })
   .middleware([requireAuth])
   .inputValidator((input: { approval?: string }) => input ?? {})
   .handler(async ({ data, context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     let query = dbAdmin
@@ -53,7 +59,10 @@ export const adminReviewProperty = createServerFn({ method: "POST" })
   .middleware([requireAuth])
   .inputValidator((input: { id: string; approval: string; reason?: string; featured?: boolean }) => input)
   .handler(async ({ data, context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const { error } = await dbAdmin
@@ -73,7 +82,10 @@ export const adminReviewProperty = createServerFn({ method: "POST" })
 export const adminListUsers = createServerFn({ method: "GET" })
   .middleware([requireAuth])
   .handler(async ({ context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const [profiles, roles] = await Promise.all([
@@ -91,7 +103,10 @@ export const adminSetUserRole = createServerFn({ method: "POST" })
   .middleware([requireAuth])
   .inputValidator((input: { userId: string; role: string }) => input)
   .handler(async ({ data, context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     await dbAdmin.from("user_roles").delete().eq("user_id", data.userId);
@@ -106,7 +121,10 @@ export const adminSetUserActive = createServerFn({ method: "POST" })
   .middleware([requireAuth])
   .inputValidator((input: { userId: string; active: boolean }) => input)
   .handler(async ({ data, context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const { error } = await dbAdmin
@@ -121,7 +139,10 @@ export const adminSaveTaxonomy = createServerFn({ method: "POST" })
   .middleware([requireAuth])
   .inputValidator((input: { kind: "categories" | "facilities"; name: string; icon?: string }) => input)
   .handler(async ({ data, context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { slugify } = await import("./format");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
@@ -138,7 +159,10 @@ export const adminDeleteTaxonomy = createServerFn({ method: "POST" })
   .middleware([requireAuth])
   .inputValidator((input: { kind: "categories" | "facilities"; id: string }) => input)
   .handler(async ({ data, context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const { error } = await dbAdmin.from(data.kind).delete().eq("id", data.id);
@@ -149,7 +173,10 @@ export const adminDeleteTaxonomy = createServerFn({ method: "POST" })
 export const adminListReports = createServerFn({ method: "GET" })
   .middleware([requireAuth])
   .handler(async ({ context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const { data } = await dbAdmin
@@ -163,7 +190,10 @@ export const adminUpdateReport = createServerFn({ method: "POST" })
   .middleware([requireAuth])
   .inputValidator((input: { id: string; status: string }) => input)
   .handler(async ({ data, context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const { error } = await dbAdmin
@@ -177,7 +207,10 @@ export const adminUpdateReport = createServerFn({ method: "POST" })
 export const adminListBanners = createServerFn({ method: "GET" })
   .middleware([requireAuth])
   .handler(async ({ context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const { data } = await dbAdmin.from("banners").select("*").order("sort_order");
@@ -198,7 +231,10 @@ export const adminSaveBanner = createServerFn({ method: "POST" })
     }) => input,
   )
   .handler(async ({ data, context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const payload = {
@@ -220,7 +256,10 @@ export const adminDeleteBanner = createServerFn({ method: "POST" })
   .middleware([requireAuth])
   .inputValidator((input: { id: string }) => input)
   .handler(async ({ data, context }) => {
-    const isAdmin = context.isAdmin;
+    const { data: isAdmin } = await context.db.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
     if (!isAdmin) throw new Error("Forbidden");
     const { db: dbAdmin } = await import("@/lib/db/pgrest.server");
     const { error } = await dbAdmin.from("banners").delete().eq("id", data.id);

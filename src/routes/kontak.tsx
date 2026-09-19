@@ -1,6 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageCircle } from "lucide-react";
-import { openWhatsappChat } from "@/components/WhatsappFloat";
 import { toast } from "sonner";
 import { z } from "zod";
 import { PublicLayout } from "@/components/PublicLayout";
@@ -45,13 +43,6 @@ function KontakPage() {
             <div><dt className="text-muted-foreground">Telepon</dt><dd className="font-medium">+6281312778888</dd></div>
             <div><dt className="text-muted-foreground">Jam operasional</dt><dd className="font-medium">Senin–Sabtu, 08.00–18.00 WIB</dd></div>
           </dl>
-          <button
-            type="button"
-            onClick={openWhatsappChat}
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:opacity-90"
-          >
-            <MessageCircle className="h-5 w-5" /> Chat WhatsApp
-          </button>
         </div>
         <form
           className="space-y-4 rounded-xl border bg-card p-6 shadow-soft"

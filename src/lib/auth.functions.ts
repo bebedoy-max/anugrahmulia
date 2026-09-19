@@ -3,26 +3,14 @@ import { createServerFn } from "@tanstack/react-start";
 
 export type CurrentUser = { id: string; email: string; name: string; roles: string[] } | null;
 
-export type SignInResult =
-  | { ok: true; user: Exclude<CurrentUser, null> }
-  | { ok: false; message: string };
-
 export const signIn = createServerFn({ method: "POST" })
   .validator((input: { email: string; password: string }) => input)
-  .handler(async ({ data }): Promise<SignInResult> => {
+  .handler(async ({ data }) => {
     const { authenticate } = await import("./auth/users-v2.server");
     const { createSessionToken, setSessionCookie } = await import("./auth/session.server");
-    try {
-      const user = await authenticate(data.email, data.password);
-      setSessionCookie(createSessionToken({ sub: user.id, email: user.email, name: user.name }));
-      return { ok: true, user };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Gagal masuk.";
-      if (message === "Email atau kata sandi salah." || message.startsWith("Akun Anda dinonaktifkan")) {
-        return { ok: false, message };
-      }
-      throw error;
-    }
+    const user = await authenticate(data.email, data.password);
+    setSessionCookie(createSessionToken({ sub: user.id, email: user.email, name: user.name }));
+    return user;
   });
 
 export const signUp = createServerFn({ method: "POST" })

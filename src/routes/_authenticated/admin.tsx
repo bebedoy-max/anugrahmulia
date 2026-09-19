@@ -24,10 +24,8 @@ import {
 import { getFilterMeta } from "@/lib/properties.functions";
 import { ImageUploader } from "@/components/upload/ImageUploader";
 import { PillarManager } from "@/components/admin/PillarManager";
-import { CategoryManager } from "@/components/admin/CategoryManager";
 import { CompanyVideoManager } from "@/components/admin/CompanyVideoManager";
 import { BannerManager } from "@/components/admin/BannerManager";
-import { WhatsappManager } from "@/components/admin/WhatsappManager";
 
 
 import { LocationPicker } from "@/components/map/LocationPicker";
@@ -71,12 +69,6 @@ type Draft = {
   agentPhone: string;
   images: string[];
 };
-
-const PILLAR_GROUPS = [
-  { pillar: "properti", label: "Mulia Properti" },
-  { pillar: "konstruksi", label: "Mulia Konstruksi" },
-  { pillar: "pertanahan", label: "Mulia Pertanahan" },
-] as const;
 
 const emptyDraft: Draft = {
   title: "",
@@ -252,14 +244,12 @@ function AdminPage() {
         <TabsList className="flex-wrap">
           <TabsTrigger value="listing">Moderasi listing</TabsTrigger>
           <TabsTrigger value="form">{draft.id ? "Edit properti" : "Tambah properti"}</TabsTrigger>
-          <TabsTrigger value="kategori">Kategori Properti</TabsTrigger>
-          <TabsTrigger value="konstruksi">Kategori & Layanan Konstruksi</TabsTrigger>
-          <TabsTrigger value="pertanahan">Kategori & Layanan Pertanahan</TabsTrigger>
+          <TabsTrigger value="konstruksi">Mulia Konstruksi</TabsTrigger>
+          <TabsTrigger value="pertanahan">Mulia Pertanahan</TabsTrigger>
           <TabsTrigger value="users">Pengguna</TabsTrigger>
           <TabsTrigger value="reports">Laporan</TabsTrigger>
           <TabsTrigger value="banner">Banner Utama</TabsTrigger>
           <TabsTrigger value="video">Video Profil</TabsTrigger>
-          <TabsTrigger value="whatsapp">WhatsApp</TabsTrigger>
         </TabsList>
 
 
@@ -322,19 +312,9 @@ function AdminPage() {
                 onChange={(e) => set("categoryId", e.target.value)}
               >
                 <option value="">Tanpa kategori</option>
-                {PILLAR_GROUPS.map((group) => {
-                  const items = (meta?.categories ?? []).filter(
-                    (c) => (c.pillar ?? "properti") === group.pillar,
-                  );
-                  if (items.length === 0) return null;
-                  return (
-                    <optgroup key={group.pillar} label={group.label}>
-                      {items.map((c) => (
-                        <option key={c.id} value={c.id}>{c.name}</option>
-                      ))}
-                    </optgroup>
-                  );
-                })}
+                {(meta?.categories ?? []).filter((c) => (c.pillar ?? "properti") === "properti").map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
               </select>
             </div>
             <div className="space-y-1.5">
@@ -489,10 +469,6 @@ function AdminPage() {
           )}
         </TabsContent>
 
-        <TabsContent value="kategori">
-          <CategoryManager />
-        </TabsContent>
-
         <TabsContent value="konstruksi">
           <PillarManager pillar="konstruksi" label="Mulia Konstruksi" />
         </TabsContent>
@@ -507,10 +483,6 @@ function AdminPage() {
 
         <TabsContent value="video">
           <CompanyVideoManager />
-        </TabsContent>
-
-        <TabsContent value="whatsapp">
-          <WhatsappManager />
         </TabsContent>
       </Tabs>
 

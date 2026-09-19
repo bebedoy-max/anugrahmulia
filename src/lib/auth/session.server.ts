@@ -71,25 +71,18 @@ function isHttpsRequest(): boolean {
   }
 }
 
-// Di pratinjau Lovable aplikasi dijalankan di dalam iframe lintas situs, jadi
-// cookie SameSite=Lax tidak pernah dikirim kembali dan sesi seolah hilang.
-// Saat koneksi HTTPS, pakai SameSite=None + Secure supaya sesi tetap terbaca.
-function cookieOptions() {
-  const https = isHttpsRequest();
-  return {
-    httpOnly: true,
-    sameSite: (https ? "none" : "lax") as "none" | "lax",
-    path: "/",
-    secure: https,
-  };
-}
-
 export function setSessionCookie(token: string) {
-  setCookie(SESSION_COOKIE, token, { ...cookieOptions(), maxAge: MAX_AGE_SECONDS });
+  setCookie(SESSION_COOKIE, token, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    secure: isHttpsRequest(),
+    maxAge: MAX_AGE_SECONDS,
+  });
 }
 
 export function clearSessionCookie() {
-  deleteCookie(SESSION_COOKIE, cookieOptions());
+  deleteCookie(SESSION_COOKIE, { path: "/" });
 }
 
 export function readSession(): SessionPayload | null {

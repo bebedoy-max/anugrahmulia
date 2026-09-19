@@ -3,7 +3,7 @@ import { requireAuth } from "@/lib/auth/middleware";
 
 export type CategoryInput = {
   id?: string | undefined;
-  pillar: "properti" | "konstruksi" | "pertanahan";
+  pillar: "konstruksi" | "pertanahan";
   name: string;
   icon: string | null;
 };

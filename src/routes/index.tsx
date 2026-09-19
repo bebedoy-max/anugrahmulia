@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Building2, Home, Scale } from "lucide-react";
+import { Building2, Home, Hotel, Plus, Scale } from "lucide-react";
 import { PublicLayout } from "@/components/PublicLayout";
 import { PropertyCardItem } from "@/components/PropertyCard";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,8 @@ const CATEGORIES = [
   { slug: "tirtayasa-mulia", pillar: "properti", label: "Mulia Properti", icon: Home },
   { slug: "", pillar: "konstruksi", label: "Mulia Konstruksi", icon: Building2, to: "/konstruksi" as const },
   { slug: "", pillar: "pertanahan", label: "Mulia Pertanahan", icon: Scale, to: "/pertanahan" as const },
-  
+  { slug: "", pillar: "penginapan", label: "Mulia Penginapan", icon: Hotel, disabled: true },
+  { slug: "", pillar: "lainnya", label: "Bisnis Lainnya", icon: Plus, disabled: true },
 ];
 
 
@@ -70,35 +71,49 @@ function Index() {
 
   return (
     <PublicLayout>
-      <section className="relative isolate overflow-hidden">
-        <img
-          src={banner?.image_url ?? "/images/hero-properti.jpg"}
-          alt={banner?.title ?? "Hunian tropis modern dengan taman dan kolam renang"}
-          width={1920}
-          height={1088}
-          className="absolute inset-0 -z-10 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 -z-10 bg-gradient-hero" aria-hidden />
-        <div className="container-page py-24 md:py-32">
-          <div className="max-w-2xl text-primary-foreground">
-            <p className="text-sm font-medium uppercase tracking-widest text-accent">
-              {data.totalListings}+ listing terverifikasi
-            </p>
-            <h1 className="mt-3 font-display text-4xl leading-tight md:text-6xl">
-              {banner?.title ?? "Temukan rumah impian di seluruh Indonesia"}
-            </h1>
-            <p className="mt-4 text-base text-primary-foreground/80 md:text-lg">
-              {banner?.subtitle ??
-                "Rumah, apartemen, tanah, dan ruko dijual maupun disewakan — lengkap dengan peta, simulasi KPR, dan jadwal survei langsung dengan agen."}
-            </p>
-            {banner?.link_url ? (
-              <Button asChild className="mt-6">
-                <a href={banner.link_url}>Lihat selengkapnya</a>
-              </Button>
-            ) : null}
-          </div>
-        </div>
-      </section>
+      <div className="container-page pt-4 md:pt-8">
+        {banner?.image_url ? (
+          <section className="overflow-hidden rounded-xl">
+            {banner.link_url ? (
+              <a href={banner.link_url} className="block">
+                <img
+                  src={banner.image_url}
+                  alt={banner.title ?? "Banner Anugrah Mulia"}
+                  className="block h-auto w-full"
+                />
+              </a>
+            ) : (
+              <img
+                src={banner.image_url}
+                alt={banner.title ?? "Banner Anugrah Mulia"}
+                className="block h-auto w-full"
+              />
+            )}
+          </section>
+        ) : (
+          <section className="relative isolate min-h-[420px] overflow-hidden rounded-xl bg-gradient-hero">
+            <div className="flex min-h-[420px] items-center py-16">
+              <div className="max-w-2xl px-6 text-primary-foreground md:px-10">
+                <p className="text-sm font-medium uppercase tracking-widest text-accent">
+                  {data.totalListings}+ listing terverifikasi
+                </p>
+                <h1 className="mt-3 font-display text-4xl leading-tight md:text-6xl">
+                  {banner?.title ?? "Temukan rumah impian di seluruh Indonesia"}
+                </h1>
+                <p className="mt-4 text-base text-primary-foreground/80 md:text-lg">
+                  {banner?.subtitle ??
+                    "Rumah, apartemen, tanah, dan ruko dijual maupun disewakan — lengkap dengan peta, simulasi KPR, dan jadwal survei langsung dengan agen."}
+                </p>
+                {banner?.link_url ? (
+                  <Button asChild className="mt-6">
+                    <a href={banner.link_url}>Lihat selengkapnya</a>
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+          </section>
+        )}
+      </div>
 
 
 
@@ -106,11 +121,21 @@ function Index() {
 
       <section className="container-page py-14">
         <h2 className="font-display text-2xl md:text-3xl">Jelajahi berdasarkan kategori</h2>
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-5">
           {CATEGORIES.map((cat) => {
             const cardClass =
               "flex flex-col items-center gap-3 rounded-xl border bg-card p-6 text-center shadow-soft transition-colors";
-            return "to" in cat && cat.to ? (
+            return cat.disabled ? (
+              <div
+                key={cat.label}
+                className={`${cardClass} cursor-not-allowed opacity-60`}
+                aria-label={`${cat.label} (segera hadir)`}
+                title="Segera hadir"
+              >
+                <cat.icon className="size-7 text-accent" aria-hidden />
+                <span className="text-sm font-medium">{cat.label}</span>
+              </div>
+            ) : "to" in cat && cat.to ? (
               <Link key={cat.label} to={cat.to} search={{ category: undefined }} className={`${cardClass} hover:border-accent`}>
                 <cat.icon className="size-7 text-accent" aria-hidden />
                 <span className="text-sm font-medium">{cat.label}</span>

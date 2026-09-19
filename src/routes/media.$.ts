@@ -1,19 +1,19 @@
-// Melayani berkas dari bucket "media" lewat domain aplikasi (aman untuk HTTPS).
+// Menyajikan berkas dari folder media lama (pola URL /media/... warisan situs lama)
+// langsung dari folder unggahan (UPLOAD_DIR), mis. storage/uploads/media/banner/xxx.jpg.
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/media/$")({
   server: {
     handlers: {
       GET: async ({ params }) => {
+        const { readUpload } = await import("@/lib/storage.server");
         const rel = String((params as Record<string, string>)["_splat"] ?? "");
-        if (!rel || rel.includes("..")) return new Response("Not found", { status: 404 });
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const { BUCKET } = await import("@/lib/storage-remote.server");
-        const { data, error } = await supabaseAdmin.storage.from(BUCKET).download(rel);
-        if (error || !data) return new Response("Not found", { status: 404 });
-        return new Response(await data.arrayBuffer(), {
+        const file = await readUpload(rel);
+        if (!file) return new Response("Not found", { status: 404 });
+        return new Response(new Uint8Array(file.body), {
           headers: {
-            "content-type": data.type || "application/octet-stream",
+            "content-type": file.type,
+            "content-length": String(file.size),
             "cache-control": "public, max-age=31536000, immutable",
           },
         });

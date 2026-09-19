@@ -24,15 +24,15 @@ export function PropertyCardItem({
 }) {
   return (
     <article className="group overflow-hidden rounded-xl border bg-card shadow-soft transition-shadow hover:shadow-lift">
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-        <Link to="/properti/$slug" params={{ slug: property.slug }}>
+      <div className="relative overflow-hidden bg-muted">
+        <Link to="/properti/$slug" params={{ slug: property.slug }} className="block">
           <img
             src={primaryImage(property)}
             alt={`Foto ${property.title}`}
             loading="lazy"
             width={1280}
             height={853}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="block h-auto w-full"
           />
         </Link>
         <div className="absolute left-3 top-3 flex gap-2">
